@@ -7,6 +7,8 @@ const validateUserAuth = (req, res, next) => {
       message: 'Something went wrong'
     })
   }
+
+  next();
 }
 
 module.exports = {

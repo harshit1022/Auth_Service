@@ -44,6 +44,24 @@ class UserService {
     }
   }
 
+  async isAuthenticated(token) {
+    try {
+      const response = this.verifyToken(token);
+      if(!response) { // if token is not verified
+        throw {error: 'Invalid Token'}
+      }
+      const user = this.userRepository.getById(response.id);
+      if(!user) { // if token is verified, but the user is not in db anymore
+        throw {error: 'User not Present'}
+      }
+      return user.id;
+    } 
+    catch (error) {
+      console.log('Something went wrong in Authenticating User process');
+      throw error;      
+    }
+  }
+
   createToken(user) {
     try {
       const result = jwt.sign(user, JWT_KEY, {expiresIn: '2h'});
