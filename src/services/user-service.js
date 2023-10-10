@@ -6,17 +6,41 @@ const { JWT_KEY } = require('../config/serverConfig');
 
 class UserService {
   constructor() {
-    this.repository = new UserRepository();
+    this.userRepository = new UserRepository();
   }
 
   async create(data) {
     try {
-      const user = await this.repository.create(data);
+      const user = await this.userRepository.create(data);
       return user;
     } 
     catch (error) {
       console.log('Something went wrong in Service Layer');
       throw error;      
+    }
+  }
+
+  async signIn(email, plainPassword) {
+    try {
+      // Step 1 => fetch user using email
+      const user = await this.userRepository.getByEmail(email);
+      console.log(user);
+
+      // Step 2 => compare incoming plainPassword and  stored encryptedPassword
+      const passwordMatch = this.comparePassword(plainPassword, user.password);
+      
+      if(!passwordMatch) {
+        console.log("Password doesn't match");
+        throw {error: 'Incorrect Password'};
+      }
+
+      // Step 3 => If passwords match, generate JWT 
+      const newJWT = this.createToken({email: user.email, id: user.id});
+      return newJWT;
+    } 
+    catch (error) {
+      console.log('Something went wrong in Sign In process');
+      throw error;
     }
   }
 
@@ -42,8 +66,9 @@ class UserService {
     }
   }
 
-  comparePaasword(userPlainPassword, encryptedPassword) {
+  comparePassword(userPlainPassword, encryptedPassword) {
     try {
+      //console.log(encryptedPassword);
       return bcrypt.compareSync(userPlainPassword, encryptedPassword)      
     } 
     catch (error) {
