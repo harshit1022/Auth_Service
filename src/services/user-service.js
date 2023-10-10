@@ -50,7 +50,7 @@ class UserService {
       if(!response) { // if token is not verified
         throw {error: 'Invalid Token'}
       }
-      const user = this.userRepository.getById(response.id);
+      const user = await this.userRepository.getById(response.id);
       if(!user) { // if token is verified, but the user is not in db anymore
         throw {error: 'User not Present'}
       }

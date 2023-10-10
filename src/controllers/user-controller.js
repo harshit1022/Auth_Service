@@ -30,7 +30,7 @@ const create = async(req, res) => {
 const isAuthenticated = async(req, res) => {
   try {
     const token = req.headers['x-access-token'];
-    const result = await userService.isAuthenticated(token)
+    const result = await userService.isAuthenticated(token);
     return res.status(200).json({
       message: 'Successfully Authenticated User and Token is Valid',
       success: true,
