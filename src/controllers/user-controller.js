@@ -49,6 +49,27 @@ const isAuthenticated = async(req, res) => {
   }
 }
 
+const isAdmin = async(req, res) => {
+  try {
+    const result = await userService.isAdmin(req.body.id);
+    return res.status(200).json({
+      message: 'Successfully Verified Admin',
+      success: true,
+      data: result,
+      err: {}
+    })
+  } 
+  catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: 'Cannot verify Admin, error in Controller Layer',
+      success: false,
+      data: {},
+      err: error
+    });    
+  }
+}
+
 const signIn = async(req, res) => {
   try {
     const response = await userService.signIn(req.body.email, req.body.password);
@@ -73,5 +94,6 @@ const signIn = async(req, res) => {
 module.exports = {
   create,
   isAuthenticated,
-  signIn
+  signIn,
+  isAdmin
 }

@@ -19,20 +19,12 @@ const prepareAndStartServer = () => {
   app.use('/api', apiRoutes);
 
   app.listen(PORT, async () => {
+    
     console.log(`Server started on Port: ${PORT}`);
     if(process.env.DB_SYNC) {
       db.sequelize.sync({alert: true});
     }
-
-    const user1 = await User.findByPk(4);
-    const role1 = await Role.findByPk(1);
-
-    // user1.addRole(role1);
-    // const response = await user1.getRoles();
-    // console.log(response);
-    
-    // const response = await user1.hasRole(role1);
-    // console.log(response);    
+   
   });
 }
 
