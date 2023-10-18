@@ -20,12 +20,13 @@ class UserService {
       if(error.name == 'SequelizeValidationError') {
         throw error;
       }
-      throw new AppErrors( //testing
-        'ServerCustomError',
-        'Something went wrong in Service',
-        'Logical Issue Found',
-        500
-      );      
+      throw error;
+      // throw new AppErrors( //testing
+      //   'ServerCustomError',
+      //   'Something went wrong in Service',
+      //   'Logical Issue Found',
+      //   500
+      // );      
     }
   }
 
@@ -48,6 +49,9 @@ class UserService {
       return newJWT;
     } 
     catch (error) {
+      if(error.name == 'AttributeNotFound') {
+        throw error;
+      }
       console.log('Something went wrong in Sign In process');
       throw error;
     }
